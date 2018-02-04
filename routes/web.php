@@ -11,6 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::resource('lawyers','LawyersController');
+Route::resource('companies','CompaniesController');
+Route::resource('proposals','ProposalsController');
+Route::resource('service-orders','Service_ordersController');
