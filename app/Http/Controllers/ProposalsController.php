@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Service_orders;
 use Illuminate\Http\Request;
 use App\Proposals;
 
@@ -41,18 +42,14 @@ class ProposalsController extends Controller
     {
         request()->validate([
             'service_order_id'=> 'required',
-            'proposal_id' => 'required',
+            'lawyer_id' => 'required',
             'value'     => 'required',
 
         ]);
 
-        if(!empty($request->acceptance)){
-            $request->acceptance = 0;
-        }
-
 
         Proposals::create($request->all());
-        return redirect()->route('proposals.index')
+        return redirect()->route('service_orders.show_to_lawyer',[$request->service_order_id,$request->lawyer_id])
             ->with('success','Cadastro criado com sucesso');
     }
 
@@ -80,6 +77,26 @@ class ProposalsController extends Controller
     {
         $proposal = Proposals::find($id);
         return view('proposals.edit',compact('proposal'));
+    }
+
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function accept($id)
+    {
+
+        Proposals::where('id', $id)->update(array('acceptance' => 'a'));
+
+        $proposal = Proposals::find($id);
+
+        Service_orders::where('id', $proposal->service_order_id)->update(array('status' => 'd'));
+
+
+        return redirect()->route('service_orders.show',[$proposal->service_order_id])
+            ->with('success','Cadastro atualizado com sucesso');
+
     }
 
 

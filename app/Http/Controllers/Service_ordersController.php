@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Lawyers;
 use Illuminate\Http\Request;
 use App\Service_orders;
 use App\Companies;
@@ -16,7 +17,10 @@ class Service_ordersController extends Controller
         'f'=>'Finalizada',
     );
 
-
+    protected $status_proposals = array(
+        'a'=>'Aceita',
+        'n'=>'Não Aceita'
+    );
 
     /**
      * Show the form for creating a new resource.
@@ -70,14 +74,18 @@ class Service_ordersController extends Controller
 
         $status_os = $this->status_os;
 
+        $status_proposals = $this->status_proposals;
+
         $service_order = Service_orders::find($id);
+
+        $lawyers = Lawyers::all()->keyBy('id');
 
         $company = Companies::find($service_order->company_id);
         $proposals = Proposals::where('service_order_id','=',$id)
             ->latest()
             ->paginate(5);
 
-        return view('service_orders.show',compact('service_order','status_os','company','proposals'))
+        return view('service_orders.show',compact('service_order','status_os','company','proposals','status_proposals','lawyers'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -92,6 +100,8 @@ class Service_ordersController extends Controller
 
         $status_os = $this->status_os;
 
+        $status_proposals = $this->status_proposals;
+
         $service_order = Service_orders::find($id);
 
         $company = Companies::find($service_order->company_id);
@@ -101,7 +111,7 @@ class Service_ordersController extends Controller
             ->latest()
             ->paginate(5);
 
-        return view('service_orders.show',compact('service_order','status_os','company','lawyer_id','proposals'))
+        return view('service_orders.show',compact('service_order','status_os','company','lawyer_id','proposals','status_proposals'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -115,7 +125,26 @@ class Service_ordersController extends Controller
     public function edit($id)
     {
         $service_order = Service_orders::find($id);
-        return view('service_orders.edit',compact('service_order'));
+
+        $company_id = $service_order->company_id;
+
+        return view('service_orders.edit',compact('service_order','company_id'));
+    }
+
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function close($id)
+    {
+
+        Service_orders::where('id', $id)->update(array('status' => 'f'));
+
+
+        return redirect()->route('service_orders.show',[$id])
+            ->with('success','Cadastro atualizado com sucesso');
+
     }
 
 
@@ -135,7 +164,7 @@ class Service_ordersController extends Controller
             'status'        => 'required',
         ]);
         Service_orders::find($id)->update($request->all());
-        return redirect()->route('service_orders.index')
+        return redirect()->route('companies.show',[$request->company_id])
             ->with('success','Cadastro atualizado com sucesso');
     }
 
@@ -148,8 +177,12 @@ class Service_ordersController extends Controller
      */
     public function destroy($id)
     {
+        $service_order = Service_orders::find($id);
+
+        $company_id = $service_order->company_id;
+
         Service_orders::find($id)->delete();
-        return redirect()->route('service_orders.index')
+        return redirect()->route('companies.show',[$company_id])
             ->with('success','Cadastro excluído com sucesso');
     }
 }

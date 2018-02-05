@@ -36,6 +36,9 @@
                 <strong>Status:</strong>
                 {{ $status_os[$service_order->status]}}
             </div>
+            @if( $service_order->status=='d' && empty($lawyer_id))
+                <a class="btn btn-warning" href="{{ route('service_orders.close',[$service_order->id]) }}"> Fechar Ordem de Serviço? </a>
+            @endif
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
@@ -43,7 +46,6 @@
                 {{ $service_order->description}}
             </div>
         </div>
-
 
             <div class="col-lg-12 margin-tb">
                 <div class="float-left">
@@ -70,26 +72,29 @@
                 <table class="table table-dark table-bordered">
                     <tr>
                         <th>#</th>
+                        @if( empty($lawyer_id) )
                         <th>Advogado</th>
+                        @endif
                         <th>Valor</th>
                         <th>Aceitação</th>
+                        @if( empty($lawyer_id) )
                         <th width="280px">Ação</th>
+                        @endif
                     </tr>
                     @foreach ($proposals as $proposal)
                         <tr>
                             <td>{{ $proposal->id }}</td>
                             @if( empty($lawyer_id) )
-                            <td>{{ $proposal->lawyer_id}}</td>
+                            <td>{{ $lawyers[$proposal->lawyer_id]->name}}</td>
                             @endif
                             <td>{{ $proposal->value}}</td>
-                            <td>{{ $proposal->acceptance}}</td>
+                            <td>{{ $status_proposals[$proposal->acceptance] }}</td>
+                            @if( empty($lawyer_id) )
                             <td>
-                                <a class="btn btn-outline-info btn-sm" href="{{ route('companies.show',$proposal->id) }}">Exibir</a>
-                                <a class="btn btn-outline-primary btn-sm" href="{{ route('companies.edit',$proposal->id) }}">Editar</a>
-                                {!! Form::open(['method' => 'DELETE','route' => ['companies.destroy', $proposal->id],'style'=>'display:inline']) !!}
-                                {!! Form::submit('Delete', ['class' => 'btn btn-outline-danger btn-sm']) !!}
-                                {!! Form::close() !!}
+                                <a class="btn btn-outline-info btn-sm" href="{{ route('proposals.show',$proposal->id) }}">Exibir</a>
+                                <a class="btn btn-outline-success btn-sm" href="{{ route('proposals.accept',$proposal->id) }}">Aceitar</a>
                             </td>
+                            @endif
                         </tr>
                     @endforeach
                 </table>

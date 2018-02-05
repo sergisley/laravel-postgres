@@ -24,3 +24,7 @@ Route::get('create-order/{company}', 'Service_ordersController@create')->name('s
 Route::get('show-order/{order}/{lawyer}', 'Service_ordersController@show_to_lawyer')->name('service_orders.show_to_lawyer');
 
 Route::get('create-proposal/{order}/{lawyer}', 'ProposalsController@create')->name('proposals.create');
+
+Route::get('accept-proposal/{proposal}','ProposalsController@accept')->name('proposals.accept');
+
+Route::get('close-service-order/{service_order}','Service_ordersController@close')->name('service_orders.close');
