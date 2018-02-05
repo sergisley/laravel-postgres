@@ -16,6 +16,7 @@ class CreateLawyersTable extends Migration
         Schema::create('lawyers', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->string('name');
+            $table->string('email')->unique();
             $table->unsignedBigInteger('cpf')->unique();
             $table->unsignedBigInteger('phone');
             $table->timestamps();

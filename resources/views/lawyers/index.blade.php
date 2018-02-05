@@ -5,10 +5,12 @@
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="float-left">
-                <h2>Advogado</h2>
+                <h2>Advogados</h2>
+                <h3>Selecione um ou crie um novo.</h3>
             </div>
             <div class="float-right">
                 <a class="btn btn-success" href="{{ route('lawyers.create') }}"> Cadastrar Advogado </a>
+                <a class="btn btn-info" href="{{ route('home') }}"> Voltar </a>
             </div>
         </div>
     </div>
@@ -25,21 +27,23 @@
         <tr>
             <th>#</th>
             <th>Nome</th>
+            <th>Email</th>
             <th>CPF</th>
             <th>Telefone</th>
             <th width="280px">Ação</th>
         </tr>
         @foreach ($lawyers as $lawyer)
             <tr>
-                <td>{{ ++$i }}</td>
+                <td>{{ $lawyer->id }}</td>
                 <td>{{ $lawyer->name}}</td>
+                <td>{{ $lawyer->email }}</td>
                 <td>{{ $lawyer->cpf}}</td>
                 <td>{{ $lawyer->phone}}</td>
                 <td>
-                    <a class="btn btn-info" href="{{ route('lawyers.show',$lawyer->id) }}">Exibir</a>
-                    <a class="btn btn-primary" href="{{ route('lawyers.edit',$lawyer->id) }}">Editar</a>
+                    <a class="btn btn-outline-info btn-sm" href="{{ route('lawyers.show',$lawyer->id) }}">Gerenciar</a>
+                    <a class="btn btn-outline-primary btn-sm" href="{{ route('lawyers.edit',$lawyer->id) }}">Editar</a>
                     {!! Form::open(['method' => 'DELETE','route' => ['lawyers.destroy', $lawyer->id],'style'=>'display:inline']) !!}
-                    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
+                    {!! Form::submit('Delete', ['class' => 'btn btn-outline-danger btn-sm']) !!}
                     {!! Form::close() !!}
                 </td>
             </tr>

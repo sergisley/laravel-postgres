@@ -12,6 +12,6 @@ class Lawyers extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'cpf','phone'
+        'name', 'cpf','phone','email'
     ];
 }

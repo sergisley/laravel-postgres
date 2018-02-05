@@ -25,9 +25,9 @@ class ProposalsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($service_order_id,$lawyer_id)
     {
-        return view('proposals.create');
+        return view('proposals.create',compact('service_order_id','lawyer_id'));
     }
 
 
@@ -40,12 +40,20 @@ class ProposalsController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'title' => 'required',
-            'body' => 'required',
+            'service_order_id'=> 'required',
+            'proposal_id' => 'required',
+            'value'     => 'required',
+
         ]);
+
+        if(!empty($request->acceptance)){
+            $request->acceptance = 0;
+        }
+
+
         Proposals::create($request->all());
         return redirect()->route('proposals.index')
-            ->with('success','Lawyer created successfully');
+            ->with('success','Cadastro criado com sucesso');
     }
 
 
@@ -57,8 +65,8 @@ class ProposalsController extends Controller
      */
     public function show($id)
     {
-        $lawyer = Proposals::find($id);
-        return view('proposals.show',compact('lawyer'));
+        $proposal = Proposals::find($id);
+        return view('proposals.show',compact('proposal'));
     }
 
 
@@ -70,8 +78,8 @@ class ProposalsController extends Controller
      */
     public function edit($id)
     {
-        $lawyer = Proposals::find($id);
-        return view('proposals.edit',compact('lawyer'));
+        $proposal = Proposals::find($id);
+        return view('proposals.edit',compact('proposal'));
     }
 
 
@@ -85,12 +93,14 @@ class ProposalsController extends Controller
     public function update(Request $request, $id)
     {
         request()->validate([
-            'title' => 'required',
-            'body' => 'required',
+            'service_order_id'=> 'required',
+            'proposal_id' => 'required',
+            'value'     => 'required',
+            'acceptance'=> 'required',
         ]);
         Proposals::find($id)->update($request->all());
         return redirect()->route('proposals.index')
-            ->with('success','Lawyer updated successfully');
+            ->with('success','Cadastro atualizado com sucesso');
     }
 
 
@@ -104,7 +114,7 @@ class ProposalsController extends Controller
     {
         Proposals::find($id)->delete();
         return redirect()->route('proposals.index')
-            ->with('success','Lawyer deleted successfully');
+            ->with('success','Cadastro excluído com sucesso');
     }
 }
 

@@ -4,9 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Companies;
+use App\Service_orders;
 
 class CompaniesController extends Controller
 {
+
+    protected $status_os = array(
+        'c'=>'Criada',
+        'd'=>'Delegada',
+        'f'=>'Finalizada',
+    );
+
     /**
      * Display a listing of the resource.
      *
@@ -40,12 +48,12 @@ class CompaniesController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'title' => 'required',
-            'body' => 'required',
+            'name' => 'required',
+            'area_of_activity' => 'required',
         ]);
         Companies::create($request->all());
         return redirect()->route('companies.index')
-            ->with('success','Lawyer created successfully');
+            ->with('success','Cadastro criado com sucesso');
     }
 
 
@@ -57,8 +65,13 @@ class CompaniesController extends Controller
      */
     public function show($id)
     {
-        $lawyer = Companies::find($id);
-        return view('companies.show',compact('lawyer'));
+        $company = Companies::find($id);
+        $status_os = $this->status_os;
+
+        $service_orders = Service_orders::where('company_id', '=', $id)->latest()->paginate(5);
+        return view('companies.show',compact('company','service_orders','status_os'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
+
     }
 
 
@@ -70,8 +83,8 @@ class CompaniesController extends Controller
      */
     public function edit($id)
     {
-        $lawyer = Companies::find($id);
-        return view('companies.edit',compact('lawyer'));
+        $company = Companies::find($id);
+        return view('companies.edit',compact('company'));
     }
 
 
@@ -85,12 +98,12 @@ class CompaniesController extends Controller
     public function update(Request $request, $id)
     {
         request()->validate([
-            'title' => 'required',
-            'body' => 'required',
+            'name' => 'required',
+            'area_of_activity' => 'required',
         ]);
         Companies::find($id)->update($request->all());
         return redirect()->route('companies.index')
-            ->with('success','Lawyer updated successfully');
+            ->with('success','Cadastro atualizado com sucesso');
     }
 
 
@@ -104,6 +117,6 @@ class CompaniesController extends Controller
     {
         Companies::find($id)->delete();
         return redirect()->route('companies.index')
-            ->with('success','Lawyer deleted successfully');
+            ->with('success','Cadastro excluído com sucesso');
     }
 }

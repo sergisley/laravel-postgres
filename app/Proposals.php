@@ -12,7 +12,7 @@ class Proposals extends Model
      * @var array
      */
     protected $fillable = [
-        'company_id','lawyer_id','value','acceptance'
+        'service_order_id','lawyer_id','value','acceptance'
     ];
 }
 

@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Lawyers;
+use App\Service_orders;
 
 class LawyersController extends Controller
 {
+    protected $status_os = array(
+        'c'=>'Criada',
+        'd'=>'Delegada',
+        'f'=>'Finalizada',
+    );
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +21,9 @@ class LawyersController extends Controller
      */
     public function index()
     {
+
         $lawyers = Lawyers::latest()->paginate(5);
+
         return view('lawyers.index',compact('lawyers'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
@@ -42,12 +51,16 @@ class LawyersController extends Controller
         request()->validate([
             'name'      => 'required',
             'cpf'       => 'required',
-            'phone'     =>'required'
+            'phone'     =>'required',
+            'email'     => 'required|email|unique:lawyers',
         ]);
+
+
         Lawyers::create($request->all());
+
         return redirect()
             ->route('lawyers.index')
-            ->with('success','Advogado cadastrado com sucesso');
+            ->with('success','Cadastro criado com sucesso');
     }
 
 
@@ -59,8 +72,12 @@ class LawyersController extends Controller
      */
     public function show($id)
     {
+        $status_os = $this->status_os;
+        $service_orders = Service_orders::latest()->paginate(5);
+
+
         $lawyer = Lawyers::find($id);
-        return view('lawyers.show',compact('lawyer'));
+        return view('lawyers.show',compact('lawyer','status_os','service_orders'));
     }
 
 
@@ -89,11 +106,11 @@ class LawyersController extends Controller
         request()->validate([
             'name'      => 'required',
             'cpf'       => 'required',
-            'phone'  =>'required'
+            'phone'     =>'required'
         ]);
         Lawyers::find($id)->update($request->all());
         return redirect()->route('lawyers.index')
-            ->with('success','Lawyer updated successfully');
+            ->with('success','Cadastro atualizado com sucesso');
     }
 
 
@@ -107,7 +124,7 @@ class LawyersController extends Controller
     {
         Lawyers::find($id)->delete();
         return redirect()->route('lawyers.index')
-            ->with('success','Lawyer deleted successfully');
+            ->with('success','Cadastro excluído com sucesso');
     }
 }
 
