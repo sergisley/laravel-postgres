@@ -32,6 +32,7 @@
             <th>Telefone</th>
             <th width="280px">Ação</th>
         </tr>
+        @if(!empty($lawyers))
         @foreach ($lawyers as $lawyer)
             <tr>
                 <td>{{ $lawyer->id }}</td>
@@ -48,6 +49,7 @@
                 </td>
             </tr>
         @endforeach
+        @endif;
     </table>
 
 
