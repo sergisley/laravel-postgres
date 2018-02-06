@@ -47,6 +47,8 @@ class ProposalsController extends Controller
 
         ]);
 
+        $request['value'] = str_replace('.', '', $request['value']);
+        $request['value'] = str_replace(',', '.', $request['value']);
 
         Proposals::create($request->all());
         return redirect()->route('service_orders.show_to_lawyer',[$request->service_order_id,$request->lawyer_id])

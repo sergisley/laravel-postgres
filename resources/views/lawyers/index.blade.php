@@ -38,8 +38,10 @@
                 <td>{{ $lawyer->id }}</td>
                 <td>{{ $lawyer->name}}</td>
                 <td>{{ $lawyer->email }}</td>
-                <td>{{ $lawyer->cpf}}</td>
-                <td>{{ $lawyer->phone}}</td>
+
+                <td>{{ vsprintf("%s%s%s.%s%s%s.%s%s%s-%s%s", str_split($lawyer->cpf))}}</td>
+
+                <td>{{ vsprintf( (strlen($lawyer->phone)==10?"(%s%s) %s%s%s%s-%s%s%s%s":"(%s%s) %s%s%s%s-%s%s%s%s%s"), str_split($lawyer->phone))}}</td>
                 <td>
                     <a class="btn btn-outline-info btn-sm" href="{{ route('lawyers.show',$lawyer->id) }}">Gerenciar</a>
                     <a class="btn btn-outline-primary btn-sm" href="{{ route('lawyers.edit',$lawyer->id) }}">Editar</a>

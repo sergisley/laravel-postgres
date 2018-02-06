@@ -55,6 +55,8 @@ class LawyersController extends Controller
             'email'     => 'required|email|unique:lawyers',
         ]);
 
+        $request['cpf'] = preg_replace('/\D/', '', $request['cpf']);
+        $request['phone'] = preg_replace('/\D/', '', $request['phone']);
 
         Lawyers::create($request->all());
 
@@ -108,6 +110,11 @@ class LawyersController extends Controller
             'cpf'       => 'required',
             'phone'     =>'required'
         ]);
+
+
+        $request['cpf'] = preg_replace('/\D/', '', $request['cpf']);
+        $request['phone'] = preg_replace('/\D/', '', $request['phone']);
+
         Lawyers::find($id)->update($request->all());
         return redirect()->route('lawyers.index')
             ->with('success','Cadastro atualizado com sucesso');

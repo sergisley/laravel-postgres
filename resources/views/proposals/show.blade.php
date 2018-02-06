@@ -30,7 +30,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Valor:</strong>
-                {{ $proposal->value}}
+                {{ number_format($proposal->value,2,',','.')}}
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">

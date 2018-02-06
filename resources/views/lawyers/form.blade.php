@@ -14,13 +14,13 @@
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>CPF:</strong>
-            {!! Form::text('cpf', null, array('placeholder' => 'CPF','class' => 'form-control')) !!}
+            {!! Form::text('cpf', null, array('placeholder' => 'CPF','class' => 'form-control','data-mask'=>"000.000.000-00")) !!}
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="form-group">
             <strong>Telefone:</strong>
-            {!! Form::text('phone', null, array('placeholder' => 'Telefone','class' => 'form-control')) !!}
+            {!! Form::text('phone', null, array('placeholder' => 'Telefone','class' => 'form-control','data-mask'=>"(00) 00000-0000")) !!}
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 text-center">

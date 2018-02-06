@@ -35,7 +35,7 @@
                 <td>{{ $proposal->id }}</td>
                 <td>{{ $proposal->service_order_id}}</td>
                 <td>{{ $proposal->lawyer_id}}</td>
-                <td>{{ $proposal->value}}</td>
+                <td>{{ number_format($proposal->value,2,',','.')}}</td>
                 <td>{{ $proposal->acceptance}}</td>
                 <td>
                     <a class="btn btn-outline-info btn-sm" href="{{ route('companies.show',$proposal->id) }}">Exibir</a>

@@ -87,11 +87,10 @@
                             @if( empty($lawyer_id) )
                             <td>{{ $lawyers[$proposal->lawyer_id]->name}}</td>
                             @endif
-                            <td>{{ $proposal->value}}</td>
+                            <td>{{ number_format($proposal->value,2,',','.')}}</td>
                             <td>{{ $status_proposals[$proposal->acceptance] }}</td>
                             @if( empty($lawyer_id) )
                             <td>
-                                <a class="btn btn-outline-info btn-sm" href="{{ route('proposals.show',$proposal->id) }}">Exibir</a>
                                 <a class="btn btn-outline-success btn-sm" href="{{ route('proposals.accept',$proposal->id) }}">Aceitar</a>
                             </td>
                             @endif
